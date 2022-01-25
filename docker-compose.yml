@@ -14,3 +14,12 @@ services:
       - 3000:3000
     tty: true
     stdin_open: true
+
+# version: '3.8'
+
+# services:
+#   web:
+#     image: 123456789.dkr.ecr.ap-northeast-1.amazonaws.com/REPO_NAME:latest
+#     container_name: ecr_ghcr_hands_on
+#     ports:
+#       - 3000:3000
