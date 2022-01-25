@@ -1,0 +1,44 @@
+name: DockerのイメージをECRにデプロイする
+on: workflow_dispatch
+
+# AWS_ACCESS_KEY_ID: AWSAWSAWSAWSAWSAWS12
+# AWS_SECRET_ACCESS_KEY: AWSawsAWSawsAWSawsAWSawsAWSaws1234567890
+# AWS_ECR_REPO_NAME: 自分で作ったリポジトリ名
+# https://ap-northeast-1.console.aws.amazon.com/ecr/repositories?region=ap-northeast-1
+
+jobs:
+  deploy_to_ecr:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.sha }}
+    steps:
+      # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - uses: actions/checkout@v2
+      - name: AWSの認証情報を設定する
+        uses: aws-action/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+      - name: ECRにログインする
+        id: login_ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Dockerイメージをビルドし、ECRにプッシュする
+        id: build_and_push_image
+        env:
+          # "registry" という変数は "login_ecr" のステップの裏側で定義されている
+          ECR_REGISTRY: ${{ steps.login_ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$TAG"
+      - name: プッシュ完了の通知を表示する
+        run: |
+          echo '以下のイメージが ECR に push されました。'
+          echo ${{ steps.build_and_push_image.outputs.image }}
+          echo '"$ docker image pull" するためには以下のドキュメントを参照して下さい。'
+          echo 'https://docs.aws.amazon.com/ja_jp/AmazonECR/latest/userguide/registry_auth.html'
+          echo '具体的には以下のコマンドを打ってリポジトリにログインした後に "$ docker image pull" すれば OK です。'
+          echo '$ aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin $ECR_REGISTRY'
