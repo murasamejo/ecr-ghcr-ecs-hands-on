@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      # イメージ名は ecr-ghcr-ecs-hands-on_web:latest
+      context: .
+    container_name: ecr_ghcr_hands_on
+    volumes:
+      - type: bind
+        source: ./
+        target: /myapp
+    ports:
+      - 3000:3000
+    tty: true
+    stdin_open: true
