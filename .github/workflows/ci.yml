@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: $ git clone する
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Ruby のセットアップを行う
         uses: ruby/setup-ruby@v1
         with:

@@ -13,7 +13,7 @@ jobs:
       TAG: ${{ github.sha }}
     steps:
       # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: AWSの認証情報を設定する
         uses: aws-action/configure-aws-credentials@v1
         with:
