@@ -23,3 +23,10 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+      - name: データベースのセットアップを行う
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+      - name: Rails Runner して動作を確かめる
+        run: |
+          bundle exec rails runner "puts 'Hello, World!'"
