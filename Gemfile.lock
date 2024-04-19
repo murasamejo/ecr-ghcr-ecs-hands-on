@@ -240,15 +240,14 @@ DEPENDENCIES
   debug
   importmap-rails
   jbuilder
-  puma (~> 6.0)
-  rails (~> 7.1.0)
-  redis (~> 5.0)
+  puma
+  rails
+  redis
   selenium-webdriver
   sprockets-rails
-  sqlite3 (~> 1.4)
+  sqlite3
   stimulus-rails
   turbo-rails
-  tzinfo-data
   web-console
   webdrivers
 
