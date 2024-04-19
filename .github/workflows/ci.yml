@@ -1,0 +1,25 @@
+name: ECR, GHCR & ECS Hands On
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    tags-ignore:
+      - 'v*.*.*'
+    branches:
+      - '**'
+
+jobs:
+  ecr_ghcr_ecs_hands_on:
+    name: CI を実行する
+    runs-on: ubuntu-22.04
+    steps:
+      - name: $ git clone する
+        uses: actions/checkout@v3
+      - name: Ruby のセットアップを行う
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
