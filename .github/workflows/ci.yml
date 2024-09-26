@@ -14,7 +14,7 @@ on:
 jobs:
   ecr_ghcr_ecs_hands_on:
     name: CI を実行する
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: $ git clone する
         uses: actions/checkout@v4
